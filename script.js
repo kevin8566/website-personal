@@ -204,4 +204,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+    
+    // Add initial animation state to portfolio items
+    portfolioItems.forEach(item => {
+        item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        item.style.opacity = '1';
+        item.style.transform = 'scale(1)';
+    });
 });
