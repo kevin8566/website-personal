@@ -209,6 +209,7 @@ header .container {
 nav {
     display: flex;
     align-items: center;
+    position: relative; /* Added for CSS-only menu */
 }
 
 .menu {
@@ -315,6 +316,11 @@ input:checked + .slider:after {
     right: auto;
 }
 
+/* CSS-only Hamburger Menu */
+.menu-checkbox {
+    display: none; /* Sembunyikan checkbox */
+}
+
 .hamburger {
     display: none;
     cursor: pointer;
@@ -331,6 +337,47 @@ input:checked + .slider:after {
     margin: 5px 0;
     transition: var(--transition);
 }
+
+@media screen and (max-width: 768px) {
+    .hamburger {
+        display: block;
+        z-index: 101;
+    }
+    
+    .menu {
+        position: fixed;
+        top: 70px;
+        right: -100%;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background-color: var(--bg-main);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        transition: var(--transition);
+        z-index: 99;
+    }
+    
+    /* Ketika checkbox di-check, tampilkan menu */
+    .menu-checkbox:checked ~ .menu {
+        right: 0;
+    }
+    
+    /* Animasi hamburger icon saat aktif */
+    .menu-checkbox:checked ~ .hamburger span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .menu-checkbox:checked ~ .hamburger span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .menu-checkbox:checked ~ .hamburger span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -8px);
+    }
+}
+
 /* Hero Section */
 .hero {
     padding: 7rem 0;
@@ -1238,40 +1285,8 @@ footer {
 }
 
 @media screen and (max-width: 768px) {
-    .menu {
-        position: fixed;
-        top: 70px;
-        right: -100%;
-        width: 100%;
-        height: calc(100vh - 70px);
-        background-color: var(--bg-main);
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem;
-        transition: var(--transition);
-        z-index: 99;
-    }
-    
-    .menu.active {
-        right: 0;
-    }
-    
-    .hamburger {
-        display: block;
-    }
-    
-    .hamburger.active span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-    }
-    
-    .hamburger.active span:nth-child(2) {
-        opacity: 0;
-    }
-    
-    .hamburger.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -8px);
-    }
+    /* Styling untuk menu di mobile */
+    /* CSS untuk menu mobile yang sudah diperbarui di bagian Hamburger Menu CSS-only di atas */
     
     .hero-text h2, 
     .hero-text h3 {
@@ -1357,4 +1372,121 @@ footer {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #4ad1a5;
+}
+
+/* CSS-only Dark Mode Toggle */
+
+/* Default adalah dark mode */
+:root {
+    --bg-main: var(--background-dark);
+    --bg-secondary: var(--background-darker);
+    --text-main: var(--text-color);
+    --text-secondary: var(--text-light);
+    --accent: var(--primary-color);
+}
+
+/* Sembunyikan checkbox asli dari view namun tetap bisa diakses */
+#checkbox {
+    position: absolute;
+    left: -9999px;
+}
+
+/* Light mode (ketika checkbox dicentang) */
+#checkbox:checked ~ body {
+    --bg-main: #ffffff;
+    --bg-secondary: #f5f5f5;
+    --text-main: #333333;
+    --text-secondary: #666666;
+    --accent: #65F0BD;
+    --dark-color: #222222;
+}
+
+/* Pengaturan tampilan elemen berdasarkan mode */
+#checkbox:checked ~ body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+}
+
+#checkbox:checked ~ body header {
+    background-color: var(--bg-main);
+}
+
+#checkbox:checked ~ body main {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+}
+
+#checkbox:checked ~ body footer {
+    background-color: var(--bg-secondary);
+    color: var(--text-secondary);
+}
+
+/* Fix untuk portfolio overlay agar tetap terlihat baik pada kedua mode */
+#checkbox:checked ~ body .portfolio-overlay {
+    background: linear-gradient(to bottom, rgba(15, 17, 23, 0.7), rgba(15, 17, 23, 0.9));
+}
+
+#checkbox:checked ~ body .portfolio-overlay-content h3 {
+    color: #fff;
+}
+
+/* Pastikan teks tetap terbaca pada kedua mode */
+#checkbox:checked ~ body .text-white {
+    color: #333333;
+}
+
+#checkbox:checked ~ body .text-green {
+    color: var(--primary-color);
+}
+/* CSS untuk hamburger menu dengan multiple ID selectors */
+.menu-checkbox {
+    display: none; /* Sembunyikan checkbox */
+}
+
+@media screen and (max-width: 768px) {
+    .hamburger {
+        display: block;
+        z-index: 101;
+    }
+    
+    .menu {
+        position: fixed;
+        top: 70px;
+        right: -100%;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background-color: var(--bg-main);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        transition: var(--transition);
+        z-index: 99;
+    }
+    
+    /* Ketika checkbox di-check, tampilkan menu - untuk semua halaman */
+    #menu-toggle-index:checked ~ .menu,
+    #menu-toggle-contact:checked ~ .menu,
+    #menu-toggle-portfolio:checked ~ .menu {
+        right: 0;
+    }
+    
+    /* Animasi hamburger icon saat aktif - untuk semua halaman */
+    #menu-toggle-index:checked ~ .hamburger span:nth-child(1),
+    #menu-toggle-contact:checked ~ .hamburger span:nth-child(1),
+    #menu-toggle-portfolio:checked ~ .hamburger span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    #menu-toggle-index:checked ~ .hamburger span:nth-child(2),
+    #menu-toggle-contact:checked ~ .hamburger span:nth-child(2),
+    #menu-toggle-portfolio:checked ~ .hamburger span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    #menu-toggle-index:checked ~ .hamburger span:nth-child(3),
+    #menu-toggle-contact:checked ~ .hamburger span:nth-child(3),
+    #menu-toggle-portfolio:checked ~ .hamburger span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -8px);
+    }
 }
