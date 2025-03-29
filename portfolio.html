@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="dark-mode">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Theme Toggle -->
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider"></div>
+        </label>
+    </div>
+
     <header>
         <div class="container">
             <div class="logo-container">
@@ -18,22 +26,21 @@
                 <h1 class="logo-text">KEVIN</h1>
             </div>
             <nav>
+                <!-- Checkbox tersembunyi untuk menu mobile -->
+                <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+                
                 <ul class="menu">
                     <li><a href="index.html">HOME</a></li>
                     <li><a href="portfolio.html" class="active">PORTFOLIO</a></li>
                     <li><a href="contact.html">CONTACT</a></li>
                 </ul>
-                <div class="theme-switch-wrapper">
-                    <label class="theme-switch" for="checkbox">
-                        <input type="checkbox" id="checkbox" checked />
-                        <div class="slider"></div>
-                    </label>
-                </div>
-                <div class="hamburger" id="hamburger">
+                
+                <!-- Label yang berfungsi sebagai hamburger button -->
+                <label for="menu-toggle" class="hamburger">
                     <span></span>
                     <span></span>
                     <span></span>
-                </div>
+                </label>
             </nav>
         </div>
     </header>
@@ -227,6 +234,73 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Pure CSS Theme Toggle
+        const checkbox = document.getElementById('checkbox');
+        const htmlElement = document.documentElement;
+
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                htmlElement.classList.add('light-mode');
+            } else {
+                htmlElement.classList.remove('light-mode');
+            }
+        });
+        
+        // Portfolio filtering functionality - tetap membutuhkan JavaScript
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+        
+        if (filterButtons.length > 0 && portfolioItems.length > 0) {
+            // Filter portfolio items based on category
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const filterValue = this.getAttribute('data-filter');
+                    
+                    // Show all items if "all" is selected, otherwise filter by category
+                    if (filterValue === 'all') {
+                        portfolioItems.forEach(item => {
+                            item.style.display = 'block';
+                            // Add animation
+                            setTimeout(() => {
+                                item.style.opacity = '1';
+                                item.style.transform = 'scale(1)';
+                            }, 50);
+                        });
+                    } else {
+                        portfolioItems.forEach(item => {
+                            if (item.getAttribute('data-category') === filterValue) {
+                                item.style.display = 'block';
+                                // Add animation
+                                setTimeout(() => {
+                                    item.style.opacity = '1';
+                                    item.style.transform = 'scale(1)';
+                                }, 50);
+                            } else {
+                                item.style.opacity = '0';
+                                item.style.transform = 'scale(0.8)';
+                                setTimeout(() => {
+                                    item.style.display = 'none';
+                                }, 300);
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
+        // Add initial animation state to portfolio items
+        portfolioItems.forEach(item => {
+            item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            item.style.opacity = '1';
+            item.style.transform = 'scale(1)';
+        });
+    </script>
 </body>
 </html>
